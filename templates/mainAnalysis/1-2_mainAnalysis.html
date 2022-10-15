@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+    <script src="{% static '/js/vintage.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 600px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"),'infographic');
+
+    //图表配置
+    const labelRight = {
+        position: 'right'
+    };
+    option = {
+      title: {
+          text: '五育得分与班级平均值对比分析图',
+          subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        top: 80,
+        bottom: 30
+      },
+      xAxis: {
+        type: 'value',
+        position: 'top',
+        splitLine: {
+          lineStyle: {
+            type: 'dashed'
+          }
+        }
+      },
+      yAxis: {
+        type: 'category',
+        axisLine: { show: false },
+        axisLabel: { show: false },
+        axisTick: { show: true },
+        splitLine: { show: true },
+        data: ['总体评分', '德', '智', '体', '美', '劳']
+      },
+      series: [
+        {
+          name: '与班级平均值对比',
+          type: 'bar',
+          stack: 'Total',
+          label: {
+            show: true,
+            formatter: '{b}'
+          },
+          data: {{ data | safe }}
+        }
+      ]
+    };
+
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>

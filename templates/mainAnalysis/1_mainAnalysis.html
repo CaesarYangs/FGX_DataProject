@@ -5,6 +5,7 @@
     <!-- 引入 echarts.js 引入静态文件的一种方法-->
     {% load static %}
     <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
 </head>
 <body>
 
@@ -16,6 +17,10 @@
 
     //图表配置
     option = {
+        title: {
+            text: '五育总体分析图',
+            subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+        },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -29,10 +34,13 @@
         yAxis: {
             type: 'value'
         },
-        series: [
-            {
+        series: [{
                 data: {{ data | safe }},
-                type: 'bar'
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                }
             }
         ]
     };
