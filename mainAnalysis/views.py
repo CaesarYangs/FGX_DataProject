@@ -4,6 +4,7 @@ pymysql.install_as_MySQLdb()
 from django.utils.safestring import mark_safe
 from mainAnalysis.models import StudentAnalysisMain
 from mainAnalysis.models import StudentInfo
+from mainAnalysis.models import StudentgraphTest1
 # Create your views here.
 
 def index1(request):
@@ -81,3 +82,70 @@ def mainStuGraph1_2(request):
 
     theme = [1]
     return render(request, 'mainAnalysis/1-2_mainAnalysis.html', {'theme':theme,'data':data,'studentId':studentId,'studentName':studentName})
+
+
+def mainStuGraph2(request):
+    studentId = request.GET.get('id')
+    temp = StudentAnalysisMain.objects.filter(student_id=studentId)
+    studentName = list(StudentInfo.objects.filter(student_id=studentId))[0].student_name
+    data = []
+
+    student = list(temp)[0]
+    data.append(student.ch_de_score)
+    data.append(student.ch_zhi_score)
+    data.append(student.ch_ti_score)
+    data.append(student.ch_mei_score)
+    data.append(student.ch_lao_score)
+
+    return render(request, 'mainAnalysis/2_mainAnalysis.html', {'data':data,'studentId':studentId,'studentName':studentName})
+
+#打卡气泡图——按教学周
+def mainStuGraph3(request):
+    studentId = request.GET.get('id')
+    temp = StudentAnalysisMain.objects.filter(student_id=studentId)
+    studentName = list(StudentInfo.objects.filter(student_id=studentId))[0].student_name
+    data = []
+
+    student = list(temp)[0]
+    data.append(student.ch_de_score)
+    data.append(student.ch_zhi_score)
+    data.append(student.ch_ti_score)
+    data.append(student.ch_mei_score)
+    data.append(student.ch_lao_score)
+
+    return render(request, 'mainAnalysis/3_mainAnalysis.html', {'data':data,'studentId':studentId,'studentName':studentName})
+
+#打卡气泡图——每周更精确
+def mainStuGraph3_1(request):
+    studentId = request.GET.get('id')
+    temp = StudentAnalysisMain.objects.filter(student_id=studentId)
+    studentName = list(StudentInfo.objects.filter(student_id=studentId))[0].student_name
+    data = []
+
+    student = list(temp)[0]
+    data.append(student.ch_de_score)
+    data.append(student.ch_zhi_score)
+    data.append(student.ch_ti_score)
+    data.append(student.ch_mei_score)
+    data.append(student.ch_lao_score)
+
+    return render(request, 'mainAnalysis/3_1Analysis.html', {'data':data,'studentId':studentId,'studentName':studentName})
+
+
+def mainGradeAnalysis1(request):
+    studentId = request.GET.get('id')
+    studentName = list(StudentInfo.objects.filter(student_id=studentId))[0].student_name
+    year = request.GET.get('year')
+
+    if(year == '1'):
+        temp = StudentgraphTest1.objects.all()
+    else:
+        temp = StudentgraphTest1.objects.filter(year=year)
+
+    data = []
+    count = temp.count()
+    temp = list(temp)
+    for i in range(count):
+        data.append({'value':temp[i].subject_score,'name':temp[i].course_name})
+
+    return render(request, 'mainAnalysis/1_gradeAnalysis.html', {'data':data,'studentId':studentId,'studentName':studentName,'year':year})

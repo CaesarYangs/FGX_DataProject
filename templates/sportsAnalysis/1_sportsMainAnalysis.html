@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 600px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    //图表配置
+    option = {
+        title: {
+            text: '体育教育总体分析图',
+            subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        xAxis: {
+            type: 'category',
+            data: ['速度', '肺活量', '力量', '耐力', '跳跃', '柔韧']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+                data: {{ data | safe }},
+                type: 'bar',
+                showBackground: true,
+                backgroundStyle: {
+                    color: 'rgba(180, 180, 180, 0.2)'
+                }
+            }
+        ]
+    };
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>

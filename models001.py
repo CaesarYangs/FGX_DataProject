@@ -239,7 +239,7 @@ class StudentInfo(models.Model):
 
 
 class StudentgraphTest1(models.Model):
-    c1 = models.IntegerField(db_column='C1', blank=True, null=True)  # Field name made lowercase.
+    c1 = models.IntegerField(db_column='C1', primary_key=True)  # Field name made lowercase.
     year = models.IntegerField(blank=True, null=True)
     course_name = models.TextField(blank=True, null=True)
     subject_score = models.FloatField(blank=True, null=True)

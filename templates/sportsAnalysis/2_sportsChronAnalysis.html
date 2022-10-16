@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 600px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    //图表配置
+    const types = [
+        '速度',
+        '肺活量',
+        '力量',
+        '耐力',
+        '跳跃',
+        '柔韧',
+    ];
+    const datasetWithFilters = [];
+    const seriesList = [];
+    echarts.util.each(types, function (type) {
+        var datasetId = 'dataset_' + type;
+        datasetWithFilters.push({
+            id: datasetId,
+            fromDatasetId: 'dataset_raw',
+            transform: {
+                type: 'filter',
+                config: {
+                    and: [
+                        {dimension: 'Year', gte: 2018},
+                        {dimension: 'Item', '=': type}
+                    ]
+                }
+            }
+        });
+        seriesList.push({
+            type: 'line',
+            datasetId: datasetId,
+            showSymbol: false,
+            name: type,
+            endLabel: {
+                show: true,
+                formatter: function (params) {
+                    return params.value[1] + ': ' + params.value[0];
+                }
+            },
+            labelLayout: {
+                moveOverlap: 'shiftY'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            encode: {
+                x: 'Year',
+                y: 'Score',
+                label: ['Item', 'Score'],
+                itemName: 'Year',
+                tooltip: ['Score']
+            }
+        });
+    });
+    option = {
+        animationDuration: 10000,
+        dataset: [
+            {
+                id: 'dataset_raw',
+                source: {{data | safe}}
+            },
+            ...datasetWithFilters
+        ],
+        title: {
+            text: '大学期间体育成绩变化趋势图',
+            subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+        },
+        tooltip: {
+            order: 'valueDesc',
+            trigger: 'axis'
+        },
+        xAxis: {
+            type: 'category',
+            nameLocation: 'middle'
+        },
+        yAxis: {
+            name: 'Score'
+        },
+        grid: {
+            right: 140
+        },
+        series: seriesList
+    };
+
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 700px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    if ({{ year | safe }} == 1) {
+        //图表配置
+        option = {
+            title: {
+                text: '大学期间选课分析图',
+                subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+            },
+            emphasis: {
+                label: {
+                    show: true
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}学分  本年度占比：({d}%)'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '选课名称:',
+                    type: 'pie',
+                    radius: [100, 250],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 15
+                    },
+                    data: {{ data | safe }}
+                }
+            ]
+        };
+    } else {
+        //图表配置
+        option = {
+            title: {
+                text: '{{ year | safe }} 年度选课课程分析图',
+                subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+            },
+            legend: {
+                top: 'bottom'
+            },
+            emphasis: {
+                label: {
+                    show: true
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c}学分  本年度占比：({d}%)'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '{{ year | safe }}年度选课:',
+                    type: 'pie',
+                    radius: [50, 250],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 8
+                    },
+                    data: {{ data | safe }}
+                }
+            ]
+        };
+    }
+
+
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>
