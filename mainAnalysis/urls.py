@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^msg2',views.mainStuGraph2),
     url(r'^msg3p0',views.mainStuGraph3),
     url(r'^msg3p1',views.mainStuGraph3_1),
+    url(r'^msg3p2',views.mainStuGraph3_1),
     url(r'^ga1p0',views.mainGradeAnalysis1),
 ]

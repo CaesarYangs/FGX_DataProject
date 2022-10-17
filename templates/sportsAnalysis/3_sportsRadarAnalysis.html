@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 600px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    //图表配置
+    option = {
+        title: {
+            text: '大学期间体育成绩雷达图',
+            subtext: '{{ studentId | safe }} {{ studentName | safe }}'
+        },
+        legend: {
+            left: 'center',
+            data: ["成绩", "及格线","班级平均成绩"]
+        },
+        radar: {
+            // shape: 'circle',
+            indicator: [
+                {name: '速度', max: 100},
+                {name: '肺活量', max: 100},
+                {name: '力量', max: 100},
+                {name: '耐力', max: 100},
+                {name: '跳跃', max: 100},
+                {name: '柔韧', max: 100}
+            ]
+        },
+        series: [
+            {
+                type: 'radar',
+                data: {{ data | safe }},
+                symbol: 'rect',
+                symbolSize: 15,
+                label: {
+                    show: true,
+                    formatter: function (params) {
+                        return params.value;
+                    }
+                }
+            },
+            {
+                name: '及格线',
+                type: 'radar',
+                data: [{
+                    value: [60, 60, 60, 60, 60, 60],
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }]
+            }
+        ]
+    };
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>
