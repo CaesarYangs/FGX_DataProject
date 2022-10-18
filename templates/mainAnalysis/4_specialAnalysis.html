@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 600px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    //图表配置
+    option = {
+        tooltip: {},
+        {#legend: [#}
+        {#    {#}
+        {#        data: graph.categories.map(function (a) {#}
+        {#            return a.name;#}
+        {#        })#}
+        {#    }#}
+        {#],#}
+        series: [
+            {
+                name: 'Les Miserables',
+                type: 'graph',
+                layout: 'none',
+                data: {{ data | safe }},
+                links: {{ link | safe }},
+                categories: {{ categories | safe }},
+                roam: true,
+                label: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{b}'
+                },
+                labelLayout: {
+                    hideOverlap: true
+                },
+                scaleLimit: {
+                    min: 0.4,
+                    max: 2
+                },
+                lineStyle: {
+                    color: 'source',
+                    curveness: 0.3
+                }
+            }
+        ]
+    };
+
+
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts</title>
+    <!-- 引入 echarts.js 引入静态文件的一种方法-->
+    {% load static %}
+    <script src="{% static '/js/echarts.js' %}"></script>
+    <script src="{% static '/js/infographic.js' %}"></script>
+</head>
+<body>
+
+<div id="chart1" style="width: 1200px; height: 700px;"></div>
+
+<script inline="javascript">
+    //获了画布对象
+    var chart = echarts.init(document.getElementById("chart1"));
+
+    //图表配置
+    option = {
+      tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove'
+      },
+      series: [
+        {
+          type: 'tree',
+          data: [{{ data | safe }}],
+          top: '10%',
+          bottom: '14%',
+          layout: 'radial',
+          symbol: 'emptyCircle',
+          symbolSize: 7,
+          initialTreeDepth: 3,
+          animationDurationUpdate: 750,
+          emphasis: {
+            focus: 'descendant'
+          }
+        }
+      ]
+    }
+    //绘制图表
+    chart.setOption(option);
+
+</script>
+
+</body>
+</html>
